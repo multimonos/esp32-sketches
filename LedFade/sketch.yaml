@@ -1,0 +1,2 @@
+# required for arduino-language-server only
+fqbn: esp32:esp32:esp32
