@@ -1,9 +1,10 @@
 #include <cstdint>
 #include <esp_log.h>
-//
-// Pin mappings for esp32 are at https://github.com/espressif/arduino-esp32/blob/14095487f6628807ae92b22ff268f12ea51559ad/variants/esp32/pins_arduino.h
-//
 
+//
+// Pin mappings for esp32 are at 
+// https://github.com/espressif/arduino-esp32/blob/14095487f6628807ae92b22ff268f12ea51559ad/variants/esp32/pins_arduino.h
+//
 const uint8_t R = A4;
 const uint8_t B = A5;
 const uint8_t G = A18;
@@ -26,7 +27,8 @@ void setup() {
   ledcAttach(R, 12000, 8);
   ledcAttach(G, 12000, 8);
   ledcAttach(B, 12000, 8);
-  Serial.begin(115200);
+
+  Serial.begin(115200); // esp32 requires esp_log.h
 }
 
 void loop() {
@@ -37,7 +39,9 @@ void loop() {
     ledcWrite(R, colors[i].r);
     ledcWrite(G, colors[i].g);
     ledcWrite(B, colors[i].b);
+
     Serial.printf("\n%d : (r,g,b) = (%d, %d, %d)", i, colors[i].r, colors[i].g, colors[i].b);
+
     delay(500);
   }
 }
