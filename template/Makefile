@@ -2,6 +2,7 @@
 
 FQBN:=__FQBN__
 PORT:=__PORT__
+BAUDRATE:=115200
 
 info:
 	@echo '{"port":"$(PORT)","fqbn":"$(FQBN)"}' | jq
@@ -10,7 +11,6 @@ info:
 dev:
 	arduino-cli compile --fqbn $(FQBN) --build-path ./build --only-compilation-database . \
 	&& cp ./build/compile_commands.json . \
-	&& tree
 
 build:
 	arduino-cli compile \
@@ -28,7 +28,8 @@ upload:
 monitor:
 	arduino-cli monitor \
 		--fqbn $(FQBN) \
-		--port $(PORT)
+		--port $(PORT) \
+		--config baudrate=$(BAUDRATE)
 
 attach:
 	arduino-cli board attach \
