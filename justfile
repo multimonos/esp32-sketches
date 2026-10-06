@@ -1,5 +1,5 @@
 boards_path:="./boards"
-templates:="./template"
+templates:="./templates"
 default_board:="esp32-wroom-32e"
 
 # list attached boards
@@ -10,8 +10,29 @@ board-ls:
 core-ls:
   arduino-cli core list
 
-# create a new sketch
-sketch name board=default_board:
+new-pio name:
+  #!/usr/bin/env bash
+
+  target="./{{name}}"
+
+  if [ -d "${target}" ]; then
+    echo "! target already exists: ${target}"
+    exit 1
+  fi
+
+  mkdir "${target}"
+
+  cd "${target}"
+
+  echo "+ init platform io project"
+  pio project init --board esp32dev --ide vim
+
+  echo "+ copying template files from {{templates}}/pio/*"
+  rsync -av ../templates/pio/ ./
+  pio run -t compiledb
+
+
+new-arduino-cli name board=default_board:
   #!/usr/bin/env bash
 
   target="./{{name}}"
@@ -47,8 +68,8 @@ sketch name board=default_board:
     exit 1
   fi
 
-  echo "+ copying template files from {{templates}}/* --> $target"
-  cp {{templates}}/* "${target}"
+  echo "+ copying template files from {{templates}}/arduino-cli/* --> $target"
+  cp {{templates}}/arduino-cli/* "${target}"
   sed -i '' "s|__PORT__|${port}|g" "${target}/Makefile"
   sed -i '' "s|__FQBN__|${fqbn}|g" "${target}/Makefile"
   sleep 1
