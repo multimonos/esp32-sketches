@@ -17,10 +17,10 @@ void setup() {
   Serial.begin(115200);
 
   ledcAttachPin(RED_GPIO, RED_CHANNEL);
-  ledcSetup(RED_CHANNEL, 12000, 8);
+  ledcSetup(RED_CHANNEL, 12000, 12);
 
   ledcAttachPin(BLU_GPIO, BLU_CHANNEL);
-  ledcSetup(BLU_CHANNEL, 12000, 8);
+  ledcSetup(BLU_CHANNEL, 12000, 12);
 }
 
 void loop() {
@@ -29,8 +29,8 @@ void loop() {
   uint16_t bluRaw = analogRead(POT1_GPIO);
 
   // map brightness
-  uint8_t redValue = (redRaw * 255) / 4095;
-  uint8_t bluValue = (bluRaw * 255) / 4095;
+  uint8_t redValue = redRaw;
+  uint8_t bluValue = bluRaw;
 
   // power led
   ledcWrite(RED_CHANNEL, redValue);
@@ -40,5 +40,5 @@ void loop() {
   Serial.printf("\nred: raw: %d, value: %d -- blu: raw: %d, value: %d", redRaw,
                 redValue, bluRaw, bluValue);
 
-  delay(100);
+  delay(500);
 }
