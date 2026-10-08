@@ -12,8 +12,9 @@
  * Consider that the int interruptCount might be 32-bits.  It's
  * possible that onInterrupt() writes 16 of the bits,
  */
-const uint8_t LED_GPIO = 32;
-const uint8_t INTERRUPT_GPIO = 25;
+constexpr uint8_t LED_GPIO = 32;
+constexpr uint8_t INTERRUPT_GPIO = 25;
+constexpr uint32_t DEBOUNCE_MICROS = 1000000; // 1s
 
 /** Interrupt Service Routine setup */
 portMUX_TYPE mux = portMUX_INITIALIZER_UNLOCKED;
@@ -22,19 +23,22 @@ bool ledEnabled = false;
 
 // "volatile" is required to modify the value within the ISR function.
 volatile int interruptCount = 0;
+uint8_t toggleCount = 0;
 volatile unsigned long lastMicros = 0;
-long debounceMillis = 3000;
 
 // ISR Handler
 void IRAM_ATTR onInterrupt() {
+
+  uint32_t now = micros(); // call once outside critical
+
   // Acquire mutex lock
   // Temporarily disable interrupts on the current cpu core
   portENTER_CRITICAL_ISR(&mux);
 
   // If it's been a second
-  if ((long)(micros() - lastMicros) >= debounceMillis * 1000) {
+  if (now - lastMicros >= DEBOUNCE_MICROS) {
     interruptCount++;
-    lastMicros = micros();
+    lastMicros = now;
   }
 
   portEXIT_CRITICAL_ISR(&mux);
@@ -60,21 +64,22 @@ void setup() {
 
 void loop() {
   // IO Control
-  bool shouldWrite = false;
+  bool shouldToggle = false;
 
   // Write data then release lock
   portENTER_CRITICAL(&mux);
   if (interruptCount > 0) {
     interruptCount--;
-    shouldWrite = true;
+    shouldToggle = true;
   }
   portEXIT_CRITICAL(&mux);
 
   // Use the bool test here so that io ops
   // are not performed within critical code
-  if (shouldWrite) {
+  if (shouldToggle) {
+    toggleCount++;
     ledEnabled = !ledEnabled;
     digitalWrite(LED_GPIO, ledEnabled);
-    Serial.println("interrupt triggered");
+    Serial.printf("\ninterrupt triggered: %d", toggleCount);
   }
 }
