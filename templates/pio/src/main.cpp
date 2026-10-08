@@ -5,5 +5,5 @@ void setup() { Serial.begin(115200); }
 
 void loop() {
   Serial.println("ohai :)");
-  delay(3000);
+  delay(1000);
 }
