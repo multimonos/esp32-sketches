@@ -26,11 +26,12 @@ monitor:
 log:
 	@/usr/bin/script -q /dev/null pio device monitor -b $(BAUDRATE) |grep --line-buffered -v '^---'
 
-# sample plot command
+# sample plot command given each line is printing "value: 1234.56" ... exit with "qq"
 plot:
 	@/usr/bin/script -q /dev/null pio device monitor -b $(BAUDRATE) \
 		|grep --line-buffered -v '^---' \
-		|sed -u 's/^.*\:\s//g' \
-		|ttyplot -t 'esp32 data'
+		|sed -u 's/^value: //g' \
+		|ttyplot -t 'esp32 data'; \
+		stty sane # reset terminal
 
 run: deploy monitor
