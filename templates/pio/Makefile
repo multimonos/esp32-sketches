@@ -26,4 +26,11 @@ monitor:
 log:
 	@/usr/bin/script -q /dev/null pio device monitor -b $(BAUDRATE) |grep --line-buffered -v '^---'
 
+# sample plot command
+plot:
+	@/usr/bin/script -q /dev/null pio device monitor -b $(BAUDRATE) \
+		|grep --line-buffered -v '^---' \
+		|sed -u 's/^.*\:\s//g' \
+		|ttyplot -t 'esp32 data'
+
 run: deploy monitor
