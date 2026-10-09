@@ -7,6 +7,7 @@
  *
  * - wave a magnet directly over the chip to activate
  * - sensor is near gpio 32
+ * - no cicuit diagram is required
  */
 void setup() { Serial.begin(115200); }
 
