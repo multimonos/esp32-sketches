@@ -1,6 +1,8 @@
+
 boards_path:="./boards"
 templates:="./templates"
 default_board:="esp32-wroom-32e"
+
 
 # list attached boards
 board-ls:
@@ -9,6 +11,22 @@ board-ls:
 # list installed cores
 core-ls:
   arduino-cli core list
+
+# create webp from source image
+webp source:
+  #!/usr/bin/env bash
+  cd "{{invocation_directory()}}"
+  src="{{source}}"
+  dst="${src%.*}.webp"
+  xattr -c "{{source}}" 2>/dev/null || true
+  magick "{{source}}" \
+  -resize "1080x1080>" \
+  -define webp:sharp-yuv=true \
+  -define webp:method=6 \
+  -quality 80 \
+  "${dst}" 
+  echo "created ${dst}"
+  
 
 new-pio name:
   #!/usr/bin/env bash
