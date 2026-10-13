@@ -9,7 +9,7 @@ info:
 # setup / install pkgs
 # adafruit/DHT sensor library@^1.4.6
 # adafruit/Adafruit Unified Sensor@^1.1.14
-setup:
+install:
 	pio pkg install \
 		--library "adafruit/DHT sensor library@^1.4.6" \
 		--library "adafruit/Adafruit Unified Sensor@^1.1.14"
