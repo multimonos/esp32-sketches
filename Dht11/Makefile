@@ -6,6 +6,14 @@ info:
 	@cat ./platformio.ini \
 		&& echo "baudrate: $(BAUDRATE)"
 
+# setup / install pkgs
+# adafruit/DHT sensor library@^1.4.6
+# adafruit/Adafruit Unified Sensor@^1.1.14
+setup:
+	pio pkg install \
+		--library "adafruit/DHT sensor library@^1.4.6" \
+		--library "adafruit/Adafruit Unified Sensor@^1.1.14"
+
 # generate the compile_commands.json
 compile:
 	pio run -t compiledb
