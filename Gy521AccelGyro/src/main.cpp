@@ -58,7 +58,10 @@ void printDataset(uint8_t mpuAddress) {
     float accely = ay / 16384.0f;
     float accelz = az / 16384.0f;
 
-    Serial.printf("{ \"accel\": { \"x\": %.2f, \"y\": %2.f, \"z\": %2.f } }\n",
+    // Serial.printf("{ \"accel\": { \"x\": %d, \"y\": %d, \"z\": %d } }\n", ax,
+    // ay, az);
+    Serial.printf("{ \"accel\": { \"x\": %.2f, \"y\": %2.f, "
+                  "\"z\": %2.f } }\n",
                   accelx, accely, accelz);
   }
 }
