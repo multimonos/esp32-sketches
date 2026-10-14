@@ -47,7 +47,11 @@ new-pio name:
 
   echo "+ copying template files from {{templates}}/pio/*"
   rsync -av ../templates/pio/ ./
+
+  
+  echo "+ generating ${target}/compile_commands.json"
   pio run -t compiledb
+  echo 'compile_commands.json' >> "${target}/.gitignore"
 
 
 new-arduino-cli name board=default_board:
